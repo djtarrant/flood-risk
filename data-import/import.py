@@ -1,4 +1,4 @@
-from db import mycursor
+from db import myconnection, mycursor
 import csv
 
 #mycursor.execute("SHOW TABLES")
@@ -23,8 +23,28 @@ with open(fname, 'r') as fp:
     reader = csv.reader(fp, delimiter=",")
     for row in reader:
         content = list(row[i] for i in included_cols)
-        if content[1] != 'None': #gets any at risk of flooding
-            print(content)
+        postcode = content[0]
+        floodRisk = content[1]
+        if content[2] == '\\N':
+            riskDate = ''
+        else:
+            riskDate = content[2]
+        latitude = content[3]
+        longitude = content[4]
+
+        #if riskLevel != 'None': #gets any at risk of flooding
+            #print(content)
+        print(content)
+
+        #mycursor.execute("INSERT INTO location (postcode, latitude, longitude, floodRisk, riskDate) VALUES ('"+postcode+"', '"+latitude+"', '"+longitude+"', '"+floodRisk+"', '"+riskDate+"') ")
+        #print("INSERT INTO location (postcode, latitude, longitude, floodRisk, riskDate) VALUES ('"+postcode+"', '"+latitude+"', '"+longitude+"', '"+floodRisk+"', '"+riskDate+"') ")
+
+        sql = "INSERT INTO location (postcode, latitude, longitude, floodRisk, riskDate) VALUES (%s, %s, %s, %s, %s)"
+        val = (postcode, latitude, longitude, floodRisk, riskDate)
+        mycursor.execute(sql, val)
+        myconnection.commit()
+        print("Inserted "+postcode)
+        
     
 
 

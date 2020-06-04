@@ -47,11 +47,8 @@ def get_postcode(postcodeText):
             recordDictionary = {}
             num=0
             for row in rows:
-                recordDictionary[num] =  row[0] 
-                print(row[0], num)
+                recordDictionary[num] =  row[0]
                 num=num+1
-            records = json.dumps(recordDictionary)
-            records = records.replace("\\", "")
             message = "Total number of rows is: "+str(mycursor.rowcount)
             returnVars = jsonify(postcodeSearch=postcodeText, message=message, records=recordDictionary)
             status = 200
